@@ -1,7 +1,5 @@
 class Piece:
     """Piece"""
 
-    def __init__(self, file: int, rank: int, char: str = "?"):
-        self.file = file
-        self.rank = rank
+    def __init__(self, char: str = "?"):
         self.char = char

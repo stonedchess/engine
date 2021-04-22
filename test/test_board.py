@@ -9,7 +9,7 @@ class State(unittest.TestCase):
 
     def test_index(self):
 
-        board = Board(8, 8, [])
+        board = Board(8, 8)
         self.assertEqual(board.index(0, 0), 0)
         self.assertEqual(board.index(1, 0), 1)
         self.assertEqual(board.index(0, 1), 8)
@@ -18,19 +18,18 @@ class State(unittest.TestCase):
     def test_cells(self):
 
         pieces = [
-            Piece(0, 0),
-            Piece(1, 1),
-            Piece(3, 7),
-            Piece(4, 4),
+            (0, 0, Piece()),
+            (1, 1, Piece()),
+            (3, 7, Piece()),
         ]
 
-        board = Board(8, 8, pieces[:-1])
-        self.assertEqual(board[0, 0], pieces[0])
-        self.assertEqual(board[1, 1], pieces[1])
-        self.assertEqual(board[3, 7], pieces[2])
+        board = Board(8, 8).add(*pieces)
+        self.assertEqual(board[0, 0], pieces[0][-1])
+        self.assertEqual(board[1, 1], pieces[1][-1])
+        self.assertEqual(board[3, 7], pieces[2][-1])
         self.assertIsNone(board[4, 4])
 
-        board[4, 4] = pieces[-1]
+        board[4, 4] = Piece()
         self.assertIsNotNone(board[4, 4])
 
 
@@ -39,19 +38,23 @@ class Render(unittest.TestCase):
 
     def test_1x1(self):
 
-        board = Board(1, 1, [])
+        board = Board(1, 1)
         self.assertEqual(board.render(), "+---+\n|   |\n+---+")
 
-        board[0, 0] = Piece(1, 1)
+        board[0, 0] = Piece()
         self.assertEqual(board.render(), "+---+\n| ? |\n+---+")
 
-        board[0, 0] = Piece(1, 1, "A")
+        board[0, 0] = Piece("A")
         self.assertEqual(board.render(), "+---+\n| A |\n+---+")
 
     def test_render(self):
 
-        pieces = [Piece(2, 0, "@"), Piece(1, 0, "*"), Piece(0, 1)]
-        board = Board(3, 2, pieces)
+        board = Board(3, 2).add(
+            (2, 0, Piece("@")),
+            (1, 0, Piece("*")),
+            (0, 1, Piece("^")),
+        )
+
         self.assertEqual(
             board.render(newline=":"),
             ":".join(
@@ -59,7 +62,7 @@ class Render(unittest.TestCase):
                     "+---+---+---+",
                     "|   | * | @ |",
                     "+---+---+---+",
-                    "| ? |   |   |",
+                    "| ^ |   |   |",
                     "+---+---+---+",
                 ]
             ),

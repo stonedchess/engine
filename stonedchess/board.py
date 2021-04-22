@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 from .piece import Piece
 
@@ -13,14 +13,19 @@ class Square:
 class Board:
     """Board states holder"""
 
-    def __init__(self, files: int, ranks: int, pieces: List[Piece]):
+    def __init__(self, files: int, ranks: int):
         self.files = files
         self.ranks = ranks
-        self.pieces = pieces
 
         self.squares = [Square() for _ in range(self.files * self.ranks)]
-        for piece in self.pieces:
-            self[piece.file, piece.rank] = piece
+
+    def add(self, *pieces: Tuple[int, int, Piece]):
+        """Add pieces to the board"""
+
+        for file, rank, piece in pieces:
+            self[file, rank] = piece
+
+        return self
 
     def index(self, file: int, rank: int) -> int:
         """Get square index, given his file and rank"""
@@ -28,7 +33,7 @@ class Board:
         return rank * self.files + file
 
     def __getitem__(self, coordinates: Tuple[int, int]) -> Square:
-        """Retrieve square by slice [file, rank]"""
+        """Retrieve piece by slice [file, rank]"""
 
         return self.squares[self.index(coordinates[0], coordinates[1])].piece
 
