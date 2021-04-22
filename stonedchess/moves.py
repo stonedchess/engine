@@ -20,13 +20,17 @@ def generate(board: Board, file: int, rank: int) -> List[Move]:
     if piece is None:
         return moves
 
-    for df, dr in piece.movement:
+    for movement in piece.movement:
 
-        cfile = file + df
-        crank = rank + dr
+        cfile, crank = movement(file, rank)
+        steps = 0
 
         # while in boundaries
-        while 0 <= cfile < board.files and 0 <= crank < board.ranks:
+        while (
+            0 <= cfile < board.files
+            and 0 <= crank < board.ranks
+            and (movement.amount is None or steps < movement.amount)
+        ):
 
             # if destination is occupied
             if board[cfile, crank] is not None:
@@ -42,7 +46,7 @@ def generate(board: Board, file: int, rank: int) -> List[Move]:
                 moves.append(move)
 
             # update pointer
-            cfile += df
-            crank += dr
+            cfile, crank = movement(cfile, crank)
+            steps += 1
 
     return moves
