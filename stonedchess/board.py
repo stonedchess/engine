@@ -20,7 +20,7 @@ class Board:
 
         self.cells = [Cell() for _ in range(self.files * self.ranks)]
         for piece in self.pieces:
-            self.cells[piece.rank * self.ranks + piece.file].piece = piece
+            self[piece.file, piece.rank] = piece
 
     def index(self, file: int, rank: int) -> int:
         """Get cell index, given her file and rank"""
