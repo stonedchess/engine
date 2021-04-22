@@ -5,7 +5,7 @@ from .piece import Piece
 
 
 @dataclass
-class Cell:
+class Square:
 
     piece: Optional[Piece] = None
 
@@ -18,24 +18,24 @@ class Board:
         self.ranks = ranks
         self.pieces = pieces
 
-        self.cells = [Cell() for _ in range(self.files * self.ranks)]
+        self.squares = [Square() for _ in range(self.files * self.ranks)]
         for piece in self.pieces:
             self[piece.file, piece.rank] = piece
 
     def index(self, file: int, rank: int) -> int:
-        """Get cell index, given her file and rank"""
+        """Get square index, given his file and rank"""
 
         return rank * self.files + file
 
-    def __getitem__(self, coordinates: Tuple[int, int]) -> Cell:
-        """Retrieve cell by slice [file, rank]"""
+    def __getitem__(self, coordinates: Tuple[int, int]) -> Square:
+        """Retrieve square by slice [file, rank]"""
 
-        return self.cells[self.index(coordinates[0], coordinates[1])].piece
+        return self.squares[self.index(coordinates[0], coordinates[1])].piece
 
     def __setitem__(self, coordinates: Tuple[int, int], piece: Piece):
         """Set piece by slice [file, rank]"""
 
-        self.cells[self.index(coordinates[0], coordinates[1])].piece = piece
+        self.squares[self.index(coordinates[0], coordinates[1])].piece = piece
 
     def render(self, newline: str = "\n") -> str:
         """Render a board as ascii characters"""
