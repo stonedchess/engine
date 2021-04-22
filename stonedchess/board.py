@@ -41,23 +41,3 @@ class Board:
         """Set piece by slice [file, rank]"""
 
         self.squares[self.index(coordinates[0], coordinates[1])].piece = piece
-
-    def render(self, newline: str = "\n") -> str:
-        """Render a board as ascii characters"""
-
-        sep = "+---" * self.files + "+"
-        lines = [sep]
-
-        for rank in range(self.ranks):
-
-            line = []
-            for file in range(self.files):
-                piece = self[file, rank]
-                piece = piece.char if piece is not None else " "
-                line.append(f" {piece} ")
-
-            line = "|".join(["", *line, ""])
-            lines.append(line)
-            lines.append(sep)
-
-        return newline.join(lines)

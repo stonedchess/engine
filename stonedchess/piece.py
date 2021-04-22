@@ -18,7 +18,7 @@ class Movements:
 class Piece:
     """Piece"""
 
-    movement = Movements.rook + Movements.bishop
+    movement = Movements.horse
     jumping = False
 
     def __init__(self, char: str = "?"):
