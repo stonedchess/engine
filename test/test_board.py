@@ -32,3 +32,35 @@ class State(unittest.TestCase):
 
         board[4, 4] = pieces[-1]
         self.assertIsNotNone(board[4, 4])
+
+
+class Render(unittest.TestCase):
+    """stonedchess.Board render tests"""
+
+    def test_1x1(self):
+
+        board = Board(1, 1, [])
+        self.assertEqual(board.render(), "+---+\n|   |\n+---+")
+
+        board[0, 0] = Piece(1, 1)
+        self.assertEqual(board.render(), "+---+\n| ? |\n+---+")
+
+        board[0, 0] = Piece(1, 1, "A")
+        self.assertEqual(board.render(), "+---+\n| A |\n+---+")
+
+    def test_render(self):
+
+        pieces = [Piece(2, 0, "@"), Piece(1, 0, "*"), Piece(0, 1)]
+        board = Board(3, 2, pieces)
+        self.assertEqual(
+            board.render(newline=":"),
+            ":".join(
+                [
+                    "+---+---+---+",
+                    "|   | * | @ |",
+                    "+---+---+---+",
+                    "| ? |   |   |",
+                    "+---+---+---+",
+                ]
+            ),
+        )
