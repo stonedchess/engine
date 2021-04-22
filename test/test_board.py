@@ -2,6 +2,7 @@ import unittest
 
 from stonedchess.board import Board
 from stonedchess.piece import Piece
+from stonedchess.render import render
 
 
 class State(unittest.TestCase):
@@ -34,18 +35,18 @@ class State(unittest.TestCase):
 
 
 class Render(unittest.TestCase):
-    """stonedchess.Board render tests"""
+    """stonedchess.Board board render tests"""
 
     def test_1x1(self):
 
         board = Board(1, 1)
-        self.assertEqual(board.render(), "+---+\n|   |\n+---+")
+        self.assertEqual(render(board, []), "+---+\n|   |\n+---+")
 
         board[0, 0] = Piece()
-        self.assertEqual(board.render(), "+---+\n| ? |\n+---+")
+        self.assertEqual(render(board, []), "+---+\n| ? |\n+---+")
 
         board[0, 0] = Piece("A")
-        self.assertEqual(board.render(), "+---+\n| A |\n+---+")
+        self.assertEqual(render(board, []), "+---+\n| A |\n+---+")
 
     def test_render(self):
 
@@ -56,7 +57,7 @@ class Render(unittest.TestCase):
         )
 
         self.assertEqual(
-            board.render(newline=":"),
+            render(board, [], newline=":"),
             ":".join(
                 [
                     "+---+---+---+",
