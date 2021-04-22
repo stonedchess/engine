@@ -25,7 +25,7 @@ class Board:
     def index(self, file: int, rank: int) -> int:
         """Get cell index, given her file and rank"""
 
-        return rank * self.ranks + file
+        return rank * self.files + file
 
     def __getitem__(self, coordinates: Tuple[int, int]) -> Cell:
         """Retrieve cell by slice [file, rank]"""
