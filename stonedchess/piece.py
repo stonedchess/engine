@@ -1,65 +1,79 @@
-from typing import Callable, List, Optional, Tuple
-
-
-class Step:
-    """Movement step"""
-
-    @staticmethod
-    def linear(df: int, dr: int, amount: Optional[int] = None):
-        """Linear steps (eg. rook, bishop)"""
-
-        return Step(lambda file, rank: (file + df, rank + dr), amount)
-
-    def __init__(
-        self,
-        update: Callable[[int, int], Tuple[int, int]],
-        amount: Optional[int] = None,
-    ):
-        self.update = update
-        self.amount = amount
-
-    def __call__(self, file: int, rank: int) -> Tuple[int, int]:
-        """Update the given position"""
-
-        return self.update(file, rank)
+from typing import Optional, Tuple
 
 
 class Movements:
-    """Standard movements"""
+    """Movements utilities"""
 
-    rook = [
-        Step.linear(0, 1),
-        Step.linear(1, 0),
-        Step.linear(0, -1),
-        Step.linear(-1, 0),
-    ]
+    def __init__(
+        self,
+        df: int,
+        dr: int,
+        steps: int = 1,
+        jumps: bool = False,
+        extend: bool = False,
+    ):
+        self.df = df
+        self.dr = dr
+        self.steps = steps
+        self.extend = extend
+        self.jumps = jumps
 
-    bishop = [
-        Step.linear(1, 1),
-        Step.linear(1, -1),
-        Step.linear(-1, 1),
-        Step.linear(-1, -1),
-    ]
+        self.moves = {(df, dr, steps, extend)}
 
-    # TODO create a merge api for the steps
-    # an horse move should be made with rook(2) + rook(1)
-    horse = [
-        Step.linear(2, 1),
-        Step.linear(2, -1),
-        Step.linear(-2, 1),
-        Step.linear(-2, -1),
-        Step.linear(1, 2),
-        Step.linear(1, -2),
-        Step.linear(-1, 2),
-        Step.linear(-1, -2),
-    ]
+    def gen(
+        self, df: Optional[int] = None, dr: Optional[int] = None
+    ) -> Tuple[int, int, int, bool, bool]:
+        """Generate a move"""
+
+        return (
+            df or self.df,
+            dr or self.dr,
+            self.steps,
+            self.extend,
+            self.jumps,
+        )
+
+    def rotate(self):
+        """Rotate along four axis of simmetry"""
+
+        self.moves = {
+            self.gen(self.df, self.dr),
+            self.gen(self.df, -self.dr),
+            self.gen(-self.df, self.dr),
+            self.gen(-self.df, -self.dr),
+            self.gen(self.dr, self.df),
+            self.gen(self.dr, -self.df),
+            self.gen(-self.dr, self.df),
+            self.gen(-self.dr, -self.df),
+        }
+
+        return self
+
+    def add(self, other):
+        """Add moves from another movement"""
+
+        self.moves.update(other.moves)
+        return self
 
 
 class Piece:
     """Piece"""
 
-    movement: List[Step] = Movements.rook
+    movement: Movements
     jumping: bool = False
 
     def __init__(self, char: str = "?"):
         self.char = char
+
+
+class Rook(Piece):
+
+    movement = Movements(2, 0, steps=4, extend=False).rotate()
+
+
+# class Knight(Piece):
+
+#     movement = Movements.perpendicular(
+#         Movements.rotate(1, 0),
+#         Movements.rotate(1, 0),
+#     )

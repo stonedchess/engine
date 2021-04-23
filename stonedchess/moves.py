@@ -11,6 +11,12 @@ class Move:
     destination: Tuple[int, int]
 
 
+def check_empy_spaces(board: Board, move: Move) -> bool:
+    """Check if a move can be played without jumps"""
+
+    # TODO
+
+
 def generate(board: Board, file: int, rank: int) -> List[Move]:
     """Generate moves for the piece located ad the given square"""
 
@@ -20,16 +26,15 @@ def generate(board: Board, file: int, rank: int) -> List[Move]:
     if piece is None:
         return moves
 
-    for movement in piece.movement:
+    for df, dr, steps, extend, jump in piece.movement.moves:
 
-        cfile, crank = movement(file, rank)
-        steps = 0
+        cfile, crank = file + df, rank + dr
 
         # while in boundaries
         while (
             0 <= cfile < board.files
             and 0 <= crank < board.ranks
-            and (movement.amount is None or steps < movement.amount)
+            and (steps > 0 or extend)
         ):
 
             # if destination is occupied
@@ -46,7 +51,7 @@ def generate(board: Board, file: int, rank: int) -> List[Move]:
                 moves.append(move)
 
             # update pointer
-            cfile, crank = movement(cfile, crank)
-            steps += 1
+            cfile, crank = cfile + df, crank + dr
+            steps -= 1
 
     return moves
