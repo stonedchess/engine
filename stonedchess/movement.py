@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 
 @dataclass
@@ -12,6 +12,8 @@ class Move:
 
 class Direction(Enum):
     """Movement directions"""
+
+    none = (0, 0)
 
     right = (1, 0)
     left = (-1, 0)
@@ -27,26 +29,49 @@ class Direction(Enum):
 class Movement:
     """Piece movement"""
 
+    @dataclass
+    class Node:
+        """Movement graph node"""
+
+        direction: Direction
+        amount: int
+        branches: List
+
     def __init__(self):
-        self.paths = [[]]
+        self.graph = self.Node(Direction.none, 0, [])
 
-    def walk(self, dir: Direction, amount: int = 1):
-        """"""
+    def leafs(self, graph: Optional[Node] = None) -> List[Node]:
+        """Get movement graph leafs"""
 
-        steps = [dir.value] * amount
-        self.paths = [path + steps for path in self.paths]
+        graph = graph or self.graph
+        leafs = []
+
+        if len(graph.branches) == 0:
+            leafs.append(graph)
+
+        for branch in graph.branches:
+            leafs += self.leafs(branch)
+
+        return leafs
+
+    def walk(self, direction: Direction, amount: int = 1):
+        """Walk a direction"""
+
+        for leaf in self.leafs():
+            node = self.Node(direction, amount, [])
+            leaf.branches.append(node)
+
         return self
 
     def split(self, *branches):
-        """"""
+        """Split the path in different branches"""
 
-        paths = []
+        for leaf in self.leafs():
+            for graph in branches:
 
-        for movement in branches:
-            for branch in movement.paths:
-                paths += [path + branch for path in self.paths]
+                graph = graph if isinstance(graph, self.Node) else graph.graph
+                leaf.branches += graph.branches
 
-        self.paths = paths
         return self
 
 
@@ -59,23 +84,37 @@ def generate(board, file: int, rank: int) -> List[Move]:
     if piece is None:
         return moves
 
-    for steps in piece.movement.paths:
+    movement: Movement = piece.movement
 
+    def explore(graph: Movement.Node, file: int, rank: int) -> List[Move]:
+        """Explore graph for moves"""
+
+        file_o = file
+        rank_o = rank
         ok = True
-        c_file = file
-        c_rank = rank
 
-        for df, dr in steps:
+        df, dr = graph.direction.value
+        for i in range(graph.amount):
 
-            c_file += df
-            c_rank += dr
+            file += df
+            rank += dr
 
-            if board[c_file, c_rank] is not None:
+            if board[file, rank] is not None:
                 ok = False
                 break
 
-        if ok:
-            move = Move((file, rank), (c_file, c_rank))
-            moves.append(move)
+        if not ok:
+            return []
 
+        moves = []
+
+        if len(graph.branches) == 0:
+            moves.append(Move((file_o, rank_o), (file, rank)))
+
+        for branch in graph.branches:
+            moves += explore(branch, file, rank)
+
+        return moves
+
+    moves = explore(movement.graph, file, rank)
     return moves

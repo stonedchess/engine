@@ -13,16 +13,16 @@ class Piece:
 class Rook(Piece):
 
     # movement = Movement().split(
-    #     Movement().walk(Direction.top).paths[0],
-    #     Movement().walk(Direction.bottom).paths[0],
-    #     Movement().walk(Direction.left).paths[0],
-    #     Movement().walk(Direction.right).paths[0],
+    #     Movement().walk(Direction.top),
+    #     Movement().walk(Direction.bottom),
+    #     Movement().walk(Direction.left),
+    #     Movement().walk(Direction.right),
     # )
 
     movement = Movement().split(
         Movement().split(
-            Movement().walk(Direction.top),
-            Movement().walk(Direction.bottom),
+            Movement().walk(Direction.top, 2),
+            Movement().walk(Direction.bottom, 2),
         ),
         Movement()
         .walk(Direction.right, 2)
