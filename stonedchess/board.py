@@ -68,37 +68,49 @@ class Board:
 
         self.squares[self.index(position)].piece = piece
 
-    def moves(self, file: int, rank: int) -> List[Move]:
+    def __contains__(self, position: Position) -> bool:
+        """Check if a position is inside the board"""
+
+        return 0 <= self.index(position) < len(self.squares)
+
+    def move(self, move: Move):
+        """Make a move"""
+
+        self[move.destination] = self[move.origin]
+        self[move.origin] = None
+
+    def moves(self, position: Position) -> List[Move]:
         """Generate moves for a cell"""
 
-        piece = self[file, rank]
+        origin = Position(position.file, position.rank)
+        piece = self[position]
         if piece is None:
             return []
 
         def explore(graph: Movement.Node, position: Position) -> List[Move]:
             """Explore graph for moves"""
 
-            ok = True
-            old = Position(position.file, position.rank)
-
             for i in range(graph.amount):
 
                 position += graph.direction.value
-                if self[position] is not None and not graph.jumps:
-                    ok = False
+
+                if position not in self:
                     break
 
-            if not ok:
-                return []
+                if self[position] is not None and not graph.jumps:
+                    break
 
-            moves = []
+            else:
+                moves = []
 
-            if len(graph.branches) == 0:
-                moves.append(Move(old, position))
+                if len(graph.branches) == 0:
+                    moves.append(Move(origin, position))
 
-            for branch in graph.branches:
-                moves += explore(branch, position)
+                for branch in graph.branches:
+                    moves += explore(branch, position)
 
-            return moves
+                return moves
 
-        return explore(piece.movement.graph, Position(file, rank))
+            return []
+
+        return explore(piece.movement.graph, position)
