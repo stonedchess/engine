@@ -24,7 +24,7 @@ class Rook(Piece):
             Movement().walk(Direction.top, 2),
             Movement().walk(Direction.bottom, 2),
         ),
-        Movement()
+        Movement(jumps=True)
         .walk(Direction.right, 2)
         .split(
             Movement().walk(Direction.top),

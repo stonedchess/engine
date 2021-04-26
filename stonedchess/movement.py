@@ -37,8 +37,11 @@ class Movement:
         amount: int
         branches: List
 
-    def __init__(self):
-        self.graph = self.Node(Direction.none, 0, [])
+        jumps: bool = False
+
+    def __init__(self, jumps: bool = False):
+        self.jumps = jumps
+        self.graph = self.Node(Direction.none, 0, [], jumps)
 
     def leafs(self, graph: Optional[Node] = None) -> List[Node]:
         """Get movement graph leafs"""
@@ -54,11 +57,18 @@ class Movement:
 
         return leafs
 
-    def walk(self, direction: Direction, amount: int = 1):
+    def walk(
+        self,
+        direction: Direction,
+        amount: int = 1,
+        jumps: Optional[bool] = None,
+    ):
         """Walk a direction"""
 
+        jumps = jumps if jumps is not None else self.jumps
+
         for leaf in self.leafs():
-            node = self.Node(direction, amount, [])
+            node = self.Node(direction, amount, [], jumps)
             leaf.branches.append(node)
 
         return self
@@ -99,7 +109,7 @@ def generate(board, file: int, rank: int) -> List[Move]:
             file += df
             rank += dr
 
-            if board[file, rank] is not None:
+            if board[file, rank] is not None and not graph.jumps:
                 ok = False
                 break
 
