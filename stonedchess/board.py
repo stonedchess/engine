@@ -24,6 +24,7 @@ class Board:
 
     def __init__(self, size: Position):
         self.squares = [Square() for _ in range(size.file * size.rank)]
+        self.history = []
         self.size = size
 
     def add(self, *pieces: Tuple[int, int, Piece]):
@@ -76,8 +77,16 @@ class Board:
     def move(self, move: Move):
         """Make a move"""
 
+        self.history.append([move, self[move.destination], self[move.origin]])
         self[move.destination] = self[move.origin]
         self[move.origin] = None
+
+    def undo(self):
+        """Undo last move"""
+
+        move, destination, origin = self.history.pop()
+        self[move.destination] = destination
+        self[move.origin] = origin
 
     def moves(self, position: Position) -> List[Move]:
         """Generate moves for a cell"""
