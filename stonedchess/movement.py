@@ -9,14 +9,14 @@ class Direction(Enum):
     """Movement directions"""
 
     none = Position(0, 0)
-    right = Position(1, 0)
-    left = Position(-1, 0)
-    top = Position(0, 1)
-    bottom = Position(0, -1)
-    right_top = Position(1, 1)
-    right_bottom = Position(1, -1)
-    left_top = Position(-1, 1)
-    left_bottom = Position(-1, -1)
+    E = Position(1, 0)
+    W = Position(-1, 0)
+    N = Position(0, 1)
+    S = Position(0, -1)
+    NE = Position(1, 1)
+    SE = Position(1, -1)
+    NW = Position(-1, 1)
+    SW = Position(-1, -1)
 
 
 class Movement:
