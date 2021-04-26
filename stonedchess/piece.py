@@ -1,66 +1,10 @@
-from typing import Optional, Tuple
-
-
-class Movements:
-    """Movements utilities"""
-
-    def __init__(
-        self,
-        df: int,
-        dr: int,
-        steps: int = 1,
-        jumps: bool = False,
-        extend: bool = False,
-    ):
-        self.df = df
-        self.dr = dr
-        self.steps = steps
-        self.extend = extend
-        self.jumps = jumps
-
-        self.moves = {(df, dr, steps, extend)}
-
-    def gen(
-        self, df: Optional[int] = None, dr: Optional[int] = None
-    ) -> Tuple[int, int, int, bool, bool]:
-        """Generate a move"""
-
-        return (
-            df or self.df,
-            dr or self.dr,
-            self.steps,
-            self.extend,
-            self.jumps,
-        )
-
-    def rotate(self):
-        """Rotate along four axis of simmetry"""
-
-        self.moves = {
-            self.gen(self.df, self.dr),
-            self.gen(self.df, -self.dr),
-            self.gen(-self.df, self.dr),
-            self.gen(-self.df, -self.dr),
-            self.gen(self.dr, self.df),
-            self.gen(self.dr, -self.df),
-            self.gen(-self.dr, self.df),
-            self.gen(-self.dr, -self.df),
-        }
-
-        return self
-
-    def add(self, other):
-        """Add moves from another movement"""
-
-        self.moves.update(other.moves)
-        return self
+from .movement import Direction, Movement
 
 
 class Piece:
     """Piece"""
 
-    movement: Movements
-    jumping: bool = False
+    movement: Movement
 
     def __init__(self, char: str = "?"):
         self.char = char
@@ -68,12 +12,22 @@ class Piece:
 
 class Rook(Piece):
 
-    movement = Movements(2, 0, steps=4, extend=False).rotate()
+    # movement = Movement().split(
+    #     Movement().walk(Direction.top).paths[0],
+    #     Movement().walk(Direction.bottom).paths[0],
+    #     Movement().walk(Direction.left).paths[0],
+    #     Movement().walk(Direction.right).paths[0],
+    # )
 
-
-# class Knight(Piece):
-
-#     movement = Movements.perpendicular(
-#         Movements.rotate(1, 0),
-#         Movements.rotate(1, 0),
-#     )
+    movement = Movement().split(
+        Movement().split(
+            Movement().walk(Direction.top),
+            Movement().walk(Direction.bottom),
+        ),
+        Movement()
+        .walk(Direction.right, 2)
+        .split(
+            Movement().walk(Direction.top),
+            Movement().walk(Direction.bottom),
+        ),
+    )

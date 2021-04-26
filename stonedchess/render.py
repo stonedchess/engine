@@ -1,7 +1,7 @@
 from typing import List
 
 from .board import Board
-from .moves import Move
+from .movement import Move
 from .piece import Piece
 
 
