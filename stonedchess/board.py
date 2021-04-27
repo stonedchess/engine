@@ -99,27 +99,42 @@ class Board:
         def explore(graph: Movement.Node, position: Position) -> List[Move]:
             """Explore graph for moves"""
 
-            for i in range(graph.amount):
+            moves = []
+            repeat = graph.repeat
 
-                position += graph.direction.value
+            if graph.extend:
 
-                if position not in self:
-                    break
+                repeat = 0
+                pointer = Position(position.file, position.rank)
 
-                if self[position] is not None and not graph.jumps:
-                    break
+                while pointer in self:
+                    pointer += graph.direction.value
+                    repeat += 1
 
-            else:
-                moves = []
+            for i in range(repeat):
 
-                if len(graph.branches) == 0:
-                    moves.append(Move(origin, position))
+                for _ in range(graph.amount):
 
-                for branch in graph.branches:
-                    moves += explore(branch, position)
+                    position += graph.direction.value
 
-                return moves
+                    if position not in self:
+                        break
 
-            return []
+                    if self[position] is not None and not graph.jumps:
+                        break
+
+                else:
+
+                    if len(graph.branches) == 0:
+                        moves.append(Move(origin, position))
+
+                    for branch in graph.branches:
+                        moves += explore(branch, position)
+
+                    continue
+
+                break
+
+            return moves
 
         return explore(piece.movement.graph, position)

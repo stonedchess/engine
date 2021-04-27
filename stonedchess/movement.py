@@ -27,14 +27,21 @@ class Movement:
         """Movement graph node"""
 
         direction: Direction
-        amount: int
         branches: List
 
+        amount: int = 1
+        repeat: int = 1
         jumps: bool = False
+        extend: bool = False
 
-    def __init__(self, jumps: bool = False):
+    def __init__(
+        self,
+        repeat: int = 1,
+        jumps: bool = False,
+        extend: bool = False,
+    ):
         self.jumps = jumps
-        self.graph = self.Node(Direction.none, 0, [], jumps)
+        self.graph = self.Node(Direction.none, [], 0, repeat, jumps, extend)
 
     def leafs(self, graph: Optional[Node] = None) -> List[Node]:
         """Get movement graph leafs"""
@@ -54,14 +61,16 @@ class Movement:
         self,
         direction: Direction,
         amount: int = 1,
+        repeat: int = 1,
         jumps: Optional[bool] = None,
+        extend: bool = False,
     ):
         """Walk a direction"""
 
         jumps = jumps if jumps is not None else self.jumps
 
         for leaf in self.leafs():
-            node = self.Node(direction, amount, [], jumps)
+            node = self.Node(direction, [], amount, repeat, jumps, extend)
             leaf.branches.append(node)
 
         return self
