@@ -1,17 +1,21 @@
+from typing import Optional
+
 from .movement import Direction, Movement
 
 
 class Piece:
     """Piece"""
 
+    char = "?"
     movement: Movement
 
-    def __init__(self, char: str = "?"):
-        self.char = char
+    def __init__(self, char: Optional[str] = None):
+        self.char = char or self.char
 
 
 class Rook(Piece):
 
+    char = ""
     movement = Movement().split(
         Movement().walk(Direction.N, extend=True),
         Movement().walk(Direction.S, extend=True),
@@ -22,6 +26,7 @@ class Rook(Piece):
 
 class Bishop(Piece):
 
+    char = ""
     movement = Movement().split(
         Movement().walk(Direction.NE, extend=True),
         Movement().walk(Direction.SE, extend=True),
@@ -32,6 +37,7 @@ class Bishop(Piece):
 
 class Knight(Piece):
 
+    char = ""
     movement = Movement(jumps=True).split(
         Movement()
         .walk(Direction.N, amount=2)
@@ -62,11 +68,13 @@ class Knight(Piece):
 
 class Pawn(Piece):
 
+    char = ""
     movement = Movement().walk(Direction.N)
 
 
 class Queen(Piece):
 
+    char = ""
     movement = Movement().split(
         Movement().walk(Direction.N, extend=True),
         Movement().walk(Direction.S, extend=True),
@@ -81,6 +89,7 @@ class Queen(Piece):
 
 class King(Piece):
 
+    char = ""
     movement = Movement().split(
         Movement().walk(Direction.N),
         Movement().walk(Direction.S),
