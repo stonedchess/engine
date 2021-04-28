@@ -27,26 +27,26 @@ class Bishop(Piece):
 class Knight(Piece):
 
     char = ""
-    movement = Movement(jumps=True).split(
-        Movement()
+    movement = Movement().split(
+        Movement(jumps=True)
         .walk(Direction.N, amount=2)
         .split(
             Movement().walk(Direction.E),
             Movement().walk(Direction.W),
         ),
-        Movement()
+        Movement(jumps=True)
         .walk(Direction.S, amount=2)
         .split(
             Movement().walk(Direction.E),
             Movement().walk(Direction.W),
         ),
-        Movement()
+        Movement(jumps=True)
         .walk(Direction.W, amount=2)
         .split(
             Movement().walk(Direction.N),
             Movement().walk(Direction.S),
         ),
-        Movement()
+        Movement(jumps=True)
         .walk(Direction.E, amount=2)
         .split(
             Movement().walk(Direction.N),
