@@ -186,7 +186,8 @@ class Board:
 
                 # captures
                 if (
-                    self[position] is not None
+                    position in self
+                    and self[position] is not None
                     and self[position].owner == self[origin].owner.opponent
                 ):
                     moves.append(Move(origin, position, MoveType.capture))
