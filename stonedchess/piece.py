@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 from .movement import Movement
 from .player import Player
@@ -21,3 +21,30 @@ class Piece:
         self.owner = owner
         self.mop = mop
         self.moves_count = 0
+
+    @classmethod
+    def as_dict(cls) -> Dict:
+        """Serialize as dict"""
+
+        movement = cls.movement
+        movements = movement if isinstance(movement, list) else [movement]
+        capture = cls.capture or Movement()
+
+        return dict(
+            char=cls.char,
+            movement=[movement.as_dict() for movement in movements],
+            capture=capture.as_dict(),
+        )
+
+    @staticmethod
+    def from_dict(origin: Dict):
+        """Serialize from dict"""
+
+        class _Piece(Piece):
+            """Deserialized piece"""
+
+            char = origin["char"]
+            movement = [Movement.from_dict(mov) for mov in origin["movement"]]
+            capture = Movement.from_dict(origin["capture"])
+
+        return _Piece

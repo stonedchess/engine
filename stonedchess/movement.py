@@ -125,7 +125,7 @@ class Movement:
 
         return self
 
-    def as_dict(self):
+    def as_dict(self) -> Dict:
         """Serialize movement graph as dict"""
 
         def fix_direction(node: self.Node):
