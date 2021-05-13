@@ -30,8 +30,8 @@ class Board:
     def add(self, *pieces: Tuple[int, int, Piece]):
         """Add pieces to the board"""
 
-        for file, rank, piece in pieces:
-            self[file, rank] = piece
+        for position, piece in pieces:
+            self[position] = piece
 
         return self
 
