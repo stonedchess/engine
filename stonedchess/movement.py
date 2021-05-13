@@ -40,7 +40,6 @@ class Movement:
         jumps: bool = False,
         extend: bool = False,
     ):
-        self.jumps = jumps
         self.graph = self.Node(Direction.none, [], 0, repeat, jumps, extend)
 
     def leafs(self, graph: Optional[Node] = None) -> List[Node]:
@@ -67,7 +66,7 @@ class Movement:
     ):
         """Walk a direction"""
 
-        jumps = jumps if jumps is not None else self.jumps
+        jumps = jumps if jumps is not None else self.graph.jumps
 
         for leaf in self.leafs():
             node = self.Node(direction, [], amount, repeat, jumps, extend)
