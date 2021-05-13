@@ -122,5 +122,9 @@ def moves(game: Game, position: Position) -> List[Move]:
         index = min(len(movement) - 1, piece.moves_count)
         movement = movement[index]
 
-    captures = explore(piece.capture.graph, position, True)
-    return captures + explore(movement.graph, position)
+    moves = explore(movement.graph, position)
+
+    if piece.capture is not None:
+        moves += explore(piece.capture.graph, position, True)
+
+    return moves
