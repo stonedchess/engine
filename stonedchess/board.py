@@ -31,7 +31,7 @@ class Board:
     """Board states holder"""
 
     def __init__(self, size: Position):
-        self.squares = [Square() for _ in range(size.file * size.rank)]
+        self.squares = [Square() for _ in size]
         self.history = []
         self.size = size
 
