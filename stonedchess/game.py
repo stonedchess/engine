@@ -18,11 +18,10 @@ class Game:
 
         mop = {Player.white: 0, Player.black: 0}
 
-        for file in range(self.board.size.file):
-            for rank in range(self.board.size.rank):
-                piece = self.board[file, rank]
-                if piece and piece.mop:
-                    mop[piece.owner] += 1
+        for position in self.board.size:
+            piece = self.board[position]
+            if piece and piece.mop:
+                mop[piece.owner] += 1
 
         if mop[Player.white] == 0:
             return Player.black
