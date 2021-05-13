@@ -1,15 +1,8 @@
 from dataclasses import dataclass
-from enum import Enum
 from typing import Optional, Tuple, Union
 
 from .piece import Piece
 from .position import Position
-
-
-class MoveType(Enum):
-
-    move = 0
-    capture = 1
 
 
 @dataclass
@@ -17,8 +10,6 @@ class Move:
 
     origin: Position
     destination: Position
-
-    type: MoveType = MoveType.move
 
 
 @dataclass

@@ -1,7 +1,7 @@
 import argparse
 from typing import List
 
-from .board import Board, Move, MoveType
+from .board import Board, Move
 from .game import Game, moves
 from .position import Position
 from .std import fen
@@ -22,7 +22,7 @@ def render(board: Board, moves: List[Move] = [], newline: str = "\n") -> str:
             piece = board[file, rank]
             char = piece.char[piece.owner.value] if piece else " "
             move = moves.get(Position(file, rank))
-            move = [".", "x"][move.type.value] if move else " "
+            move = ["x", "."][board[move.destination] is None] if move else " "
             move = "+" if Position(file, rank) in origins else move
             mop = piece.mop if piece else False
             mop = "!" if mop else " "
@@ -64,8 +64,7 @@ if __name__ == "__main__":
         if cmd == "move" and selected is not None:
             destination = Position(int(args[0]), int(args[1]))
             move = Move(selected, destination)
-            capture = Move(selected, destination, MoveType.capture)
-            if move in selected_moves or capture in selected_moves:
+            if move in selected_moves:
                 game.board.move(move)
             print(render(game.board))
 

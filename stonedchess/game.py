@@ -1,6 +1,6 @@
 from typing import List, Optional, Union
 
-from .board import Board, Move, MoveType
+from .board import Board, Move
 from .movement import Movement
 from .player import Player
 from .position import Position
@@ -108,7 +108,7 @@ def moves(game: Game, position: Position) -> List[Move]:
                 and game.board[position].owner == piece.owner.opponent
                 and graph.capture
             ):
-                moves.append(Move(origin, position, MoveType.capture))
+                moves.append(Move(origin, position))
 
             # the path is interrupted, hence
             # break and return
