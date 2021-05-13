@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, astuple, dataclass
 from enum import Enum
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from .player import Player
 from .position import Position
@@ -124,3 +124,38 @@ class Movement:
                 leaf.branches += graph.branches
 
         return self
+
+    def as_dict(self):
+        """Serialize movement graph as dict"""
+
+        def fix_direction(node: self.Node):
+            """Recursively convert directions into tuples"""
+
+            node["direction"] = astuple(node["direction"].value)
+            for branch in node["branches"]:
+                fix_direction(branch)
+
+            return node
+
+        return fix_direction(asdict(self.graph))
+
+    @staticmethod
+    def from_dict(origin: Dict):
+        """Parse dictified graph"""
+
+        def parse_nodes(node: Dict):
+            """Recursively parse nodes"""
+
+            return Movement.Node(
+                direction=Direction(Position(*node["direction"])),
+                branches=[parse_nodes(branch) for branch in node["branches"]],
+                amount=node["amount"],
+                repeat=node["repeat"],
+                jumps=node["jumps"],
+                extend=node["extend"],
+                capture=node["capture"],
+            )
+
+        movement = Movement()
+        movement.graph = parse_nodes(origin)
+        return movement
