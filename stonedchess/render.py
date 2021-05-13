@@ -8,6 +8,7 @@ def render(board: Board, moves: List[Move] = [], newline: str = "\n") -> str:
     """Render the board to ascii characters"""
 
     sep = "+---" * board.size.file + "+"
+    origins = {move.origin for move in moves}
     moves = {move.destination: move for move in moves}
     lines = [sep]
 
@@ -19,6 +20,7 @@ def render(board: Board, moves: List[Move] = [], newline: str = "\n") -> str:
             char = piece.char[piece.owner.value] if piece else " "
             move = moves.get(Position(file, rank))
             move = [".", "x"][move.type.value] if move else " "
+            move = "+" if Position(file, rank) in origins else move
             line.append(f"{move}{char} ")
 
         line = "|".join(["", *line, ""])
