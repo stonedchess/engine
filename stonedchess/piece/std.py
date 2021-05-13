@@ -4,7 +4,7 @@ from . import Piece
 
 class Rook(Piece):
 
-    char = ""
+    char = ["♖", "♜", " "]
     movement = Movement().split(
         Movement().walk(Direction.N, extend=True),
         Movement().walk(Direction.S, extend=True),
@@ -15,7 +15,7 @@ class Rook(Piece):
 
 class Bishop(Piece):
 
-    char = ""
+    char = ["♗", "♝", " "]
     movement = Movement().split(
         Movement().walk(Direction.NE, extend=True),
         Movement().walk(Direction.SE, extend=True),
@@ -26,7 +26,7 @@ class Bishop(Piece):
 
 class Knight(Piece):
 
-    char = ""
+    char = ["♘", "♞", " "]
     movement = Movement().split(
         Movement(jumps=True)
         .walk(Direction.N, amount=2)
@@ -57,13 +57,13 @@ class Knight(Piece):
 
 class Pawn(Piece):
 
-    char = ""
+    char = ["♙", "♟︎", " "]
     movement = Movement().walk(Direction.N)
 
 
 class Queen(Piece):
 
-    char = ""
+    char = ["♕", "♛", " "]
     movement = Movement().split(
         Movement().walk(Direction.N, extend=True),
         Movement().walk(Direction.S, extend=True),
@@ -78,7 +78,7 @@ class Queen(Piece):
 
 class King(Piece):
 
-    char = ""
+    char = ["♔", "♚", " "]
     movement = Movement().split(
         Movement().walk(Direction.N),
         Movement().walk(Direction.S),

@@ -1,7 +1,6 @@
 from typing import List
 
 from .board import Board, Move
-from .piece import Piece
 from .position import Position
 
 
@@ -16,9 +15,10 @@ def render(board: Board, moves: List[Move] = [], newline: str = "\n") -> str:
 
         line = []
         for file in range(board.size.file):
-            piece = board[file, rank] or Piece(" ")
+            piece = board[file, rank]
+            char = piece.char[piece.owner.value] if piece else " "
             move = "." if Position(file, rank) in moves else " "
-            line.append(f"{move}{piece.char} ")
+            line.append(f"{move}{char} ")
 
         line = "|".join(["", *line, ""])
         lines += [line, sep]
