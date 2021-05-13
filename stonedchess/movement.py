@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional
 
+from .player import Player
 from .position import Position
 
 
@@ -17,6 +18,25 @@ class Direction(Enum):
     SE = Position(1, -1)
     NW = Position(-1, 1)
     SW = Position(-1, -1)
+
+    def adapt(self, player: Player):
+        """Adapt direction to player"""
+
+        if player == Player.black:
+            if self == Direction.N:
+                return Direction.S
+            elif self == Direction.S:
+                return Direction.N
+            elif self == Direction.NW:
+                return Direction.SW
+            elif self == Direction.SW:
+                return Direction.NW
+            elif self == Direction.NE:
+                return Direction.SE
+            elif self == Direction.SE:
+                return Direction.NE
+
+        return self
 
 
 class Movement:

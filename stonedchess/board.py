@@ -110,6 +110,7 @@ class Board:
 
             moves = []
             repeat = graph.repeat
+            direction = graph.direction.adapt(self[origin].owner).value
 
             if graph.extend:
 
@@ -117,14 +118,14 @@ class Board:
                 pointer = Position(position.file, position.rank)
 
                 while pointer in self:
-                    pointer += graph.direction.value
+                    pointer += direction
                     repeat += 1
 
             for i in range(repeat):
 
                 for _ in range(graph.amount):
 
-                    position += graph.direction.value
+                    position += direction
 
                     if position not in self:
                         break
