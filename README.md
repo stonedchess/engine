@@ -9,17 +9,28 @@ We recommend git submodules to do such.
 
 ``` python
 from stonedchess.board import Board
-from stonedchess.piece import Piece, std
+from stonedchess.piece import std
 from stonedchess.position import Position
 from stonedchess.render import render
 
 board = Board(Position(20, 5)).add(
     (2, 2, std.Knight()),
-    (2, 3, std.Queen()),
 )
 
 moves = board.moves(Position(2, 2))
 print(render(board, moves))
+
+# +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+# |   |.  |   |.  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+# +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+# |.  |   |   |   |.  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+# +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+# |   |   |  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+# +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+# |.  |   |   |   |.  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+# +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+# |   |.  |   |.  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+# +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 ```
 
 ### Make custom pieces
@@ -60,7 +71,6 @@ class Knight(Piece):
             Movement().walk(Direction.S),
         ),
     )
-
 ```
 
 #### Movement directives
