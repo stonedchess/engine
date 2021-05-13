@@ -82,8 +82,3 @@ Movement().walk(direction: Direction, amount: int, extend: bool)
 # Split path
 Movement().split(*branches: Movement)
 ```
-
-## Tests
-```sh
-python -m unittest discover test -v
-```
