@@ -3,7 +3,8 @@ from enum import Enum
 from typing import List, Optional, Tuple, Union
 
 from .movement import Movement
-from .piece import Piece
+from .piece import Piece, std
+from .player import Player
 from .position import Position
 
 
@@ -30,6 +31,46 @@ class Square:
 
 class Board:
     """Board states holder"""
+
+    @staticmethod
+    def std():
+        """Standard board"""
+
+        board = Board(Position(8, 8))
+
+        # white pieces
+        board.add(
+            (Position(0, 0), std.Rook(Player.white)),
+            (Position(1, 0), std.Knight(Player.white)),
+            (Position(2, 0), std.Bishop(Player.white)),
+            (Position(3, 0), std.King(Player.white)),
+            (Position(4, 0), std.Queen(Player.white)),
+            (Position(5, 0), std.Bishop(Player.white)),
+            (Position(6, 0), std.Knight(Player.white)),
+            (Position(7, 0), std.Rook(Player.white)),
+        )
+
+        # black pieces
+        board.add(
+            (Position(0, 7), std.Rook(Player.black)),
+            (Position(1, 7), std.Knight(Player.black)),
+            (Position(2, 7), std.Bishop(Player.black)),
+            (Position(3, 7), std.King(Player.black)),
+            (Position(4, 7), std.Queen(Player.black)),
+            (Position(5, 7), std.Bishop(Player.black)),
+            (Position(6, 7), std.Knight(Player.black)),
+            (Position(7, 7), std.Rook(Player.black)),
+        )
+
+        # white pawns
+        for i in range(8):
+            board[i, 1] = std.Pawn(Player.white)
+
+        # black pawns
+        for i in range(8):
+            board[i, 6] = std.Pawn(Player.black)
+
+        return board
 
     def __init__(self, size: Position):
         self.squares = [Square() for _ in range(size.file * size.rank)]
