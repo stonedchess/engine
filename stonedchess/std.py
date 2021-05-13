@@ -64,10 +64,7 @@ class Pawn(Piece):
 
     char = ["♙", "♟︎", " "]
     movement = [
-        Movement().split(
-            Movement().walk(Direction.N, amount=2),
-            Movement().walk(Direction.N),
-        ),
+        Movement().walk(Direction.N, repeat=2),
         Movement().walk(Direction.N),
     ]
 
