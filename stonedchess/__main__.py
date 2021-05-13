@@ -1,7 +1,7 @@
 import argparse
 from typing import List
 
-from .board import Board, Move
+from .board import Board, Move, MoveType
 from .game import Game, moves
 from .position import Position
 from .std import fen
@@ -64,7 +64,8 @@ if __name__ == "__main__":
         if cmd == "move" and selected is not None:
             destination = Position(int(args[0]), int(args[1]))
             move = Move(selected, destination)
-            if move in selected_moves:
+            capture = Move(selected, destination, MoveType.capture)
+            if move in selected_moves or capture in selected_moves:
                 game.board.move(move)
             print(render(game.board))
 
