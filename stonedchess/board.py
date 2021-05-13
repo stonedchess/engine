@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Tuple, Union
 
-from .movement import Movement
 from .piece import Piece
 from .position import Position
 
@@ -96,63 +95,3 @@ class Board:
         move, destination, origin = self.history.pop()
         self[move.destination] = destination
         self[move.origin] = origin
-
-    def moves(self, position: Position) -> List[Move]:
-        """Generate moves for a cell"""
-
-        origin = Position(position.file, position.rank)
-        piece = self[position]
-        if piece is None:
-            return []
-
-        def explore(graph: Movement.Node, position: Position) -> List[Move]:
-            """Explore graph for moves"""
-
-            moves = []
-            repeat = graph.repeat
-            direction = graph.direction.adapt(self[origin].owner).value
-
-            if graph.extend:
-
-                repeat = 0
-                pointer = Position(position.file, position.rank)
-
-                while pointer in self:
-                    pointer += direction
-                    repeat += 1
-
-            for i in range(repeat):
-
-                for _ in range(graph.amount):
-
-                    position += direction
-
-                    if position not in self:
-                        break
-
-                    if self[position] is not None and not graph.jumps:
-                        break
-
-                else:
-
-                    if len(graph.branches) == 0:
-                        moves.append(Move(origin, position))
-
-                    for branch in graph.branches:
-                        moves += explore(branch, position)
-
-                    continue
-
-                # captures
-                if (
-                    position in self
-                    and self[position] is not None
-                    and self[position].owner == self[origin].owner.opponent
-                ):
-                    moves.append(Move(origin, position, MoveType.capture))
-
-                break
-
-            return moves
-
-        return explore(piece.movement.graph, position)
