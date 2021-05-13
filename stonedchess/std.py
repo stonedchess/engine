@@ -63,10 +63,16 @@ class Knight(Piece):
 class Pawn(Piece):
 
     char = ["♙", "♟︎", " "]
+
     movement = [
         Movement(capture=False).walk(Direction.N, repeat=2),
         Movement(capture=False).walk(Direction.N),
     ]
+
+    capture = Movement().split(
+        Movement().walk(Direction.NW),
+        Movement().walk(Direction.NE),
+    )
 
 
 class Queen(Piece):

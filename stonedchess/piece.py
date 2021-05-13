@@ -9,6 +9,7 @@ class Piece:
 
     char = ["?", "?", "?"]
     movement: Union[Movement, List[Movement]]
+    capture: Optional[Union[Movement, List[Movement]]] = None
 
     def __init__(
         self,

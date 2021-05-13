@@ -39,7 +39,11 @@ def moves(game: Game, position: Position) -> List[Move]:
     if piece is None:
         return []
 
-    def explore(graph: Movement.Node, position: Position) -> List[Move]:
+    def explore(
+        graph: Movement.Node,
+        position: Position,
+        force_captures: bool = False,
+    ) -> List[Move]:
         """Explore a movement graph for moves"""
 
         moves = []
@@ -83,13 +87,13 @@ def moves(game: Game, position: Position) -> List[Move]:
 
                 # if we reached a leaf of the grapf,
                 # add the move to the list of moves
-                if len(graph.branches) == 0:
+                if len(graph.branches) == 0 and not force_captures:
                     moves.append(Move(origin, position))
 
                 # if there are sub branches, iterate
                 # over them and add the new moves
                 for branch in graph.branches:
-                    moves += explore(branch, position)
+                    moves += explore(branch, position, force_captures)
 
                 # continue directly to the next repeat step
                 # avoifing the "interrupted behavior" execution
@@ -118,4 +122,5 @@ def moves(game: Game, position: Position) -> List[Move]:
         index = min(len(movement) - 1, piece.moves_count)
         movement = movement[index]
 
-    return explore(movement.graph, position)
+    captures = explore(piece.capture.graph, position, True)
+    return captures + explore(movement.graph, position)
