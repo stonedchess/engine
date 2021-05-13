@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import List, Optional, Tuple, Union
 
 from .movement import Movement
@@ -6,11 +7,19 @@ from .piece import Piece
 from .position import Position
 
 
+class MoveType(Enum):
+
+    move = 0
+    capture = 1
+
+
 @dataclass
 class Move:
 
     origin: Position
     destination: Position
+
+    type: MoveType = MoveType.move
 
 
 @dataclass
@@ -132,6 +141,13 @@ class Board:
                         moves += explore(branch, position)
 
                     continue
+
+                # captures
+                if (
+                    self[position] is not None
+                    and self[position].owner == self[origin].owner.opponent
+                ):
+                    moves.append(Move(origin, position, MoveType.capture))
 
                 break
 
