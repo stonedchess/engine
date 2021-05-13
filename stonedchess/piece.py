@@ -1,7 +1,7 @@
 from typing import Optional, Tuple
 
-from ..movement import Movement
-from ..player import Player
+from .movement import Movement
+from .player import Player
 
 
 class Piece:
