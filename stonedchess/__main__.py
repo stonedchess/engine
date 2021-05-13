@@ -70,6 +70,7 @@ if __name__ == "__main__":
 
         if cmd == "undo":
             game.board.undo()
+            print(render(game.board))
 
         elif cmd == "exit":
             break

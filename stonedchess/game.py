@@ -111,4 +111,10 @@ def moves(game: Game, position: Position) -> List[Move]:
 
         return moves
 
-    return explore(piece.movement.graph, position)
+    movement = piece.movement
+
+    if not isinstance(movement, Movement):
+        index = min(len(movement) - 1, piece.moves_count)
+        movement = movement[index]
+
+    return explore(movement.graph, position)

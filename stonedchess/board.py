@@ -89,9 +89,13 @@ class Board:
         self[move.destination] = self[move.origin]
         self[move.origin] = None
 
+        self[move.destination].moves_count += 1
+
     def undo(self):
         """Undo last move"""
 
         move, destination, origin = self.history.pop()
         self[move.destination] = destination
         self[move.origin] = origin
+
+        self[move.origin].moves_count -= 1

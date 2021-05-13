@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 from .movement import Movement
 from .player import Player
@@ -8,7 +8,7 @@ class Piece:
     """Piece"""
 
     char = ["?", "?", "?"]
-    movement: Movement
+    movement: Union[Movement, List[Movement]]
 
     def __init__(
         self,
@@ -19,3 +19,4 @@ class Piece:
         self.char = char or self.char
         self.owner = owner
         self.mop = mop
+        self.moves_count = 0
