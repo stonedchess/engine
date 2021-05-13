@@ -104,13 +104,13 @@ def fen(fen: Optional[str] = None) -> Board:
         n=Knight(Player.black),
         b=Bishop(Player.black),
         q=Queen(Player.black),
-        k=King(Player.black),
+        k=King(Player.black, mop=True),
         p=Pawn(Player.black),
         R=Rook(Player.white),
         N=Knight(Player.white),
         B=Bishop(Player.white),
         Q=Queen(Player.white),
-        K=King(Player.white),
+        K=King(Player.white, mop=True),
         P=Pawn(Player.white),
     )
 

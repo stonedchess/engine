@@ -14,6 +14,8 @@ class Piece:
         self,
         owner: Player,
         char: Optional[Tuple[str, str, str]] = None,
+        mop: bool = False,
     ):
         self.char = char or self.char
         self.owner = owner
+        self.mop = mop

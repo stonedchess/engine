@@ -21,7 +21,9 @@ def render(board: Board, moves: List[Move] = [], newline: str = "\n") -> str:
             move = moves.get(Position(file, rank))
             move = [".", "x"][move.type.value] if move else " "
             move = "+" if Position(file, rank) in origins else move
-            line.append(f"{move}{char} ")
+            mop = piece.mop if piece else False
+            mop = "!" if mop else " "
+            line.append(f"{move}{char}{mop}")
 
         line = "|".join(["", *line, ""])
         lines += [line, sep]
