@@ -1,3 +1,5 @@
+from typing import Optional
+
 from .board import Board
 from .movement import Direction, Movement
 from .piece import Piece
@@ -94,41 +96,41 @@ class King(Piece):
     )
 
 
-def board():
-    """Standard board"""
+def fen(fen: Optional[str] = None) -> Board:
+    """Parse fen string"""
+
+    pieces_map = dict(
+        r=Rook(Player.black),
+        n=Knight(Player.black),
+        b=Bishop(Player.black),
+        q=Queen(Player.black),
+        k=King(Player.black),
+        p=Pawn(Player.black),
+        R=Rook(Player.white),
+        N=Knight(Player.white),
+        B=Bishop(Player.white),
+        Q=Queen(Player.white),
+        K=King(Player.white),
+        P=Pawn(Player.white),
+    )
 
     board = Board(Position(8, 8))
 
-    # white pieces
-    board.add(
-        (Position(0, 0), Rook(Player.white)),
-        (Position(1, 0), Knight(Player.white)),
-        (Position(2, 0), Bishop(Player.white)),
-        (Position(3, 0), King(Player.white)),
-        (Position(4, 0), Queen(Player.white)),
-        (Position(5, 0), Bishop(Player.white)),
-        (Position(6, 0), Knight(Player.white)),
-        (Position(7, 0), Rook(Player.white)),
-    )
+    fen = fen or "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"
+    pieces, *_ = fen.split(" ")
 
-    # black pieces
-    board.add(
-        (Position(0, 7), Rook(Player.black)),
-        (Position(1, 7), Knight(Player.black)),
-        (Position(2, 7), Bishop(Player.black)),
-        (Position(3, 7), King(Player.black)),
-        (Position(4, 7), Queen(Player.black)),
-        (Position(5, 7), Bishop(Player.black)),
-        (Position(6, 7), Knight(Player.black)),
-        (Position(7, 7), Rook(Player.black)),
-    )
+    rank = 7
+    file = 0
 
-    # white pawns
-    for i in range(8):
-        board[i, 1] = Pawn(Player.white)
+    for char in pieces:
 
-    # black pawns
-    for i in range(8):
-        board[i, 6] = Pawn(Player.black)
+        if char == "/":
+            rank -= 1
+            file = 0
+        elif char.isdigit():
+            file += int(char)
+        else:
+            board[file, rank] = pieces_map[char]
+            file += 1
 
     return board
