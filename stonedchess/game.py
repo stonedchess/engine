@@ -45,13 +45,18 @@ def moves(game: Game, position: Position) -> List[Move]:
 
         moves = []
         repeat = graph.repeat
+
+        # adapt the direction to the color
+        # -> change south with north
         direction = graph.direction.adapt(piece.owner).value
 
+        # compute the extended repeat count
         if graph.extend:
 
             repeat = 0
             pointer = Position(position.file, position.rank)
 
+            # iterate until the pointer reaches the edge of the board
             while pointer in game.board:
                 pointer += direction
                 repeat += 1
@@ -60,24 +65,40 @@ def moves(game: Game, position: Position) -> List[Move]:
 
             for _ in range(graph.amount):
 
+                # update current position
                 position += direction
 
+                # check if the position is in the board boundaries
                 if position not in game.board:
                     break
 
+                # check if the position is occupied
+                # -> if the piece cannot jump, break
                 if game.board[position] is not None and not graph.jumps:
                     break
 
+            # reached when the for loop terminate
+            # without any break, hence without any
+            # abnormal interruption
             else:
 
+                # if we reached a leaf of the grapf,
+                # add the move to the list of moves
                 if len(graph.branches) == 0:
                     moves.append(Move(origin, position))
 
+                # if there are sub branches, iterate
+                # over them and add the new moves
                 for branch in graph.branches:
                     moves += explore(branch, position)
 
+                # continue directly to the next repeat step
+                # avoifing the "interrupted behavior" execution
                 continue
 
+            # interrupted behavior checks.
+            # if the piece is occupied and is of different color,
+            # add the capture to the list of moves
             if (
                 position in game.board
                 and game.board[position] is not None
@@ -85,6 +106,8 @@ def moves(game: Game, position: Position) -> List[Move]:
             ):
                 moves.append(Move(origin, position, MoveType.capture))
 
+            # the path is interrupted, hence
+            # break and return
             break
 
         return moves
