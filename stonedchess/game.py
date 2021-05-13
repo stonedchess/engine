@@ -102,6 +102,7 @@ def moves(game: Game, position: Position) -> List[Move]:
                 position in game.board
                 and game.board[position] is not None
                 and game.board[position].owner == piece.owner.opponent
+                and graph.capture
             ):
                 moves.append(Move(origin, position, MoveType.capture))
 

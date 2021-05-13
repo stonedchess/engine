@@ -53,14 +53,24 @@ class Movement:
         repeat: int = 1
         jumps: bool = False
         extend: bool = False
+        capture: bool = True
 
     def __init__(
         self,
         repeat: int = 1,
         jumps: bool = False,
         extend: bool = False,
+        capture: bool = True,
     ):
-        self.graph = self.Node(Direction.none, [], 0, repeat, jumps, extend)
+        self.graph = self.Node(
+            direction=Direction.none,
+            branches=[],
+            amount=0,
+            repeat=repeat,
+            jumps=jumps,
+            extend=extend,
+            capture=capture,
+        )
 
     def leafs(self, graph: Optional[Node] = None) -> List[Node]:
         """Get movement graph leafs"""
@@ -83,13 +93,23 @@ class Movement:
         repeat: int = 1,
         jumps: Optional[bool] = None,
         extend: bool = False,
+        capture: Optional[bool] = None,
     ):
         """Walk a direction"""
 
         jumps = jumps if jumps is not None else self.graph.jumps
+        capture = capture if capture is not None else self.graph.capture
 
         for leaf in self.leafs():
-            node = self.Node(direction, [], amount, repeat, jumps, extend)
+            node = self.Node(
+                direction=direction,
+                branches=[],
+                amount=amount,
+                repeat=repeat,
+                jumps=jumps,
+                extend=extend,
+                capture=capture,
+            )
             leaf.branches.append(node)
 
         return self
