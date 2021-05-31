@@ -109,18 +109,18 @@ def fen(fen: Optional[str] = None) -> Board:
     """Parse fen string"""
 
     pieces_map = dict(
-        r=Rook(Player.black),
-        n=Knight(Player.black),
-        b=Bishop(Player.black),
-        q=Queen(Player.black),
-        k=King(Player.black, mop=True),
-        p=Pawn(Player.black),
-        R=Rook(Player.white),
-        N=Knight(Player.white),
-        B=Bishop(Player.white),
-        Q=Queen(Player.white),
-        K=King(Player.white, mop=True),
-        P=Pawn(Player.white),
+        r=lambda: Rook(Player.black),
+        n=lambda: Knight(Player.black),
+        b=lambda: Bishop(Player.black),
+        q=lambda: Queen(Player.black),
+        k=lambda: King(Player.black, mop=True),
+        p=lambda: Pawn(Player.black),
+        R=lambda: Rook(Player.white),
+        N=lambda: Knight(Player.white),
+        B=lambda: Bishop(Player.white),
+        Q=lambda: Queen(Player.white),
+        K=lambda: King(Player.white, mop=True),
+        P=lambda: Pawn(Player.white),
     )
 
     board = Board(Position(8, 8))
@@ -139,7 +139,7 @@ def fen(fen: Optional[str] = None) -> Board:
         elif char.isdigit():
             file += int(char)
         else:
-            board[file, rank] = pieces_map[char]
+            board[file, rank] = pieces_map[char]()
             file += 1
 
     return board
